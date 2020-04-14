@@ -10,30 +10,28 @@
 #include <fcntl.h>
 
 char* buffer;
-sem_t *sem1;
-sem_t *sem2;//f
-sem_t *mutex;
+sem_t *sem1;	//EMPTY
+sem_t *sem2;    //FULL
+sem_t *mutex;	//LOCK
 
 void* Producer(void* param ){
 	printf("Inside the producer\n");
-	printf("N = %d\n", *(int*)param);
-
-
-    sem_wait(mutex);
-	// do buffer stuff
-
-	int i =0;
-	for (i =0; i < (*(int*)param); i++ ){
-		sem_wait(sem1);
-		//fill buffer - one character
-        sem_post(sem2);
-	}
-	
-	post_wait(mutex);
-
-	
-
-
+	int size = *(int*)param; 
+	printf("Size = %d\n", size);
+	buffer = (char*) malloc(size * sizeof(char));
+	printf("%s\n", buffer);
+ //    sem_wait(mutex);
+	// // do buffer stuff
+ //    printf("sem_wait(mutex) tak fine\n");
+	// int i =0;
+	// for (i =0; i < size; i++){
+	// 	sem_wait(sem1);
+	// 	printf("sem_wait(sem1) called\n");
+	// 	*buffer[i] = 'a'+i;
+	// 	printf("%s\n", *buffer[i]);
+ //        sem_post(sem2);
+	// }
+	// sem_post(mutex);
 	pthread_exit(0);
 }
 
@@ -43,12 +41,15 @@ void *Consumer(void *param ){
 }
 
 
+
+
+
+
+
 int main(){
-	
 	
 	pthread_t id1, id2;
 
-	
 	int buff_shm=shmget(990, 1024, 0666 | IPC_CREAT);								//shared memory created for buffer
 	if(buff_shm == -1){
 		printf("Error!\n");
@@ -64,8 +65,6 @@ int main(){
 	int n = 0;
 	printf("Input N : ");
 	scanf("%d", &n);
-	printf("%d\n", n);
-
 
 
 	int sem_shm1=shmget(991, 1024, 0666 | IPC_CREAT);								//shared memory created for semaphore
@@ -98,7 +97,7 @@ int main(){
 	sem_unlink("sem2");
 
 
-    mutext = sem_open("mutex", O_CREAT|O_EXCL, 0666, 1);
+    mutex = sem_open("mutex", O_CREAT|O_EXCL, 0666, 1);
     sem_unlink("mutex");
     printf("mutex done\n");
 
