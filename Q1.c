@@ -14,7 +14,7 @@ sem_t *sem1;
 sem_t *sem2;
 
 void* Producer(void* param ){
-	printf("Inside producer\n");
+	printf("Inside the producer\n");
 	printf("N = %d\n", *(int*)param);
 	pthread_exit(0);
 }
