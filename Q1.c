@@ -5,6 +5,9 @@
 #include <pthread.h>
 #include <semaphore.h>
 #include <stdlib.h>
+#include <sys/shm.h>    
+#include <errno.h>
+#include <fcntl.h>
 
 char* buffer;
 sem_t *sem1;
