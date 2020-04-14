@@ -11,11 +11,29 @@
 
 char* buffer;
 sem_t *sem1;
-sem_t *sem2;
+sem_t *sem2;//f
+sem_t *mutex;
 
 void* Producer(void* param ){
 	printf("Inside producer\n");
 	printf("N = %d\n", *(int*)param);
+
+
+    sem_wait(mutex);
+	// do buffer stuff
+
+	int i =0;
+	for (i =0; i < (*(int*)param); i++ ){
+		sem_wait(sem1);
+		//fill buffer - one character
+        sem_post(sem2);
+	}
+	
+	post_wait(mutex);
+
+	
+
+
 	pthread_exit(0);
 }
 
@@ -80,7 +98,9 @@ int main(){
 	sem_unlink("sem2");
 
 
-    
+    mutext = sem_open("mutex", O_CREAT|O_EXCL, 0666, 1);
+    sem_unlink("mutex");
+    printf("mutex done\n");
 
 
 
