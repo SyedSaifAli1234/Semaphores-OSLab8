@@ -3,17 +3,18 @@
 #include <sys/ipc.h>
 #include <sys/sem.h>
 #include <pthread.h>
+#include <semaphore.h>
 #include <stdlib.h>
 
 char* buffer;
 sem_t *sem1;
 sem_t *sem2;
 
-void *Producer(void *){
+void *Producer(void *param ){
 	printf("Hello producer\n");
 }
 
-void *Consumer(void *){
+void *Consumer(void *param ){
 	printf("Hello consumer\n");
 }
 
@@ -49,8 +50,8 @@ int main(){
    	 	printf("Thread not created\n");
   	}
 
-  	shmdt(id_sem);
-  	shmctl(id_sem, IPC_RMID, 0);
+  	//shmdt(id_sem);
+  	//shmctl(id_sem, IPC_RMID, 0);
   	printf("Shared memory destroyed\n");
 
 }
