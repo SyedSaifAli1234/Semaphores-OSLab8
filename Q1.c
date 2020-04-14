@@ -21,34 +21,57 @@ void *Consumer(void *param ){
 
 int main(){
 	
+	
 	pthread_t id1, id2;
 
-	int buff_shm=shmget(990, 1024, 0666 | IPC_CREAT);									//shared memory created
+	
+	int buff_shm=shmget(990, 1024, 0666 | IPC_CREAT);								//shared memory created for buffer
 	if(buff_shm == -1){
 		printf("Error!\n");
 		return 1;
 	}
-
-	buffer = (char*) shmat(buff_shm, NULL, 0);										//shared memory attached
+	buffer = (char*) shmat(buff_shm, NULL, 0);										//shared memory attached for buffer
 	if (buffer == -1){																
 		printf("Shared memory not created\n");
 	}
 	printf("Shared memory created for buffer\n");
 
 
+	int n = 0;
+	printf("Input N : ");
+	scanf("%d", &n);
+	printf("%d\n", n);
 
 
-	int sem_shm1=shmget(991, 1024, 0666 | IPC_CREAT);									//shared memory created
+
+	int sem_shm1=shmget(991, 1024, 0666 | IPC_CREAT);								//shared memory created for semaphore
 	if(sem_shm1 == -1){
 		printf("Error!\n");
-		return 1;
+		return 1; 
 	}
-
-	sem1 = (sem_t*) shmat(sem_shm1, NULL, 0);										//shared memory attached
-	if (sem1 == -1){																
+	sem1 = (sem_t*) shmat(sem_shm1, NULL, 0);										//shared memory attached for semaphore
+	if (sem1 == -1){																//Sem 1 = EMPTY
 		printf("Shared memory not created\n");
 	}
 	printf("Shared memory created for Sem1\n");
+	sem_open("sem1", O_CREAT|O_EXCL, 0644, n);
+	sem_unlink("sem1");
+
+
+
+
+	int sem_shm2=shmget(992, 1024, 0666 | IPC_CREAT);								//shared memory created for semaphore
+	if(sem_shm2 == -1){
+		printf("Error!\n");
+		return 1; 
+	}
+	sem2 = (sem_t*) shmat(sem_shm2, NULL, 0);										//shared memory attached for semaphore
+	if (sem2 == -1){																//Sem 2 = FULL
+		printf("Shared memory not created\n");
+	}
+	printf("Shared memory created for Sem2\n");
+	sem_open("sem2", O_CREAT|O_EXCL, 0644, 1);
+	sem_unlink("sem2");
 
 
     
@@ -73,6 +96,8 @@ int main(){
   	shmctl(buff_shm, IPC_RMID, 0);
   	shmdt(sem_shm1);
   	shmctl(sem_shm1, IPC_RMID, 0);
+  	shmdt(sem_shm2);
+  	shmctl(sem_shm2, IPC_RMID, 0);
 
   	printf("Shared memory was destroyed\n");
 
