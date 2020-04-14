@@ -12,19 +12,17 @@
 char* buffer;
 sem_t *sem1;
 sem_t *sem2;
-int n;
+int n = 5;
 
 void* Producer(void* param ){
 	printf("Inside producer\n");
-	//int *n = (int*) param;
-	//int nn = *n;
-	printf("N = \n", n);
+	printf("N = %d\n", n);
 	pthread_exit(0);
-
 }
 
 void *Consumer(void *param ){
 	printf("Hello consumer\n");
+	pthread_exit(0);
 }
 
 
@@ -47,9 +45,9 @@ int main(){
 
 
 	// int n = 0;
-	printf("Input N : ");
-	scanf("%d", &n);
-	printf("%d\n", n);
+	// printf("Input N : ");
+	// scanf("%d", &n);
+	// printf("%d\n", n);
 
 
 
@@ -94,8 +92,7 @@ int main(){
 	if (pthread_create(&id2, NULL, Consumer, NULL) < 0) {
     	printf("Thread not created\n");
   	}
-
-  	if (pthread_join(id1, NULL) < 0) {
+ 	if (pthread_join(id1, NULL) < 0) {
     	printf("Thread not created\n");
   	}
   	if (pthread_join(id2, NULL) < 0) {
