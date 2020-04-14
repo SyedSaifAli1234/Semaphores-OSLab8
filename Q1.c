@@ -21,7 +21,6 @@ void* Producer(void* param ){
 	printf("Size = %d\n", size);
 	buffer = (char*) malloc(size * sizeof(char));
  	sem_wait(mutex);
-	//do buffer stuff
 	int i =0;
 
 	for (i =0; i < size; i++){
@@ -30,13 +29,28 @@ void* Producer(void* param ){
         sem_post(sem2);
 	}
 	sem_post(mutex);
-	printf("%s\n", buffer);
+	printf("The producer wrote = %s\n", buffer);
 	pthread_exit(0);
 }
 
+
 void *Consumer(void *param ){
-	printf("Hello consumer\n");
+	
+	printf("Inside the Consumer\n");
+	int size = *(int*)param;
+ 	sem_wait(mutex);
+	printf("sem_wait(mutex)\n");
+	int i =0;
+
+	for (i =0; i < size-1; i++){
+		sem_wait(sem2);
+		printf("%s", buffer[i]);
+        sem_post(sem1);
+	}
+	sem_post(mutex);
+	printf("The reader is exiting\n");
 	pthread_exit(0);
+
 }
 
 
@@ -106,7 +120,7 @@ int main(){
     	printf("Thread not created\n");
   	}
   	sleep(1);
-	if (pthread_create(&id2, NULL, Consumer, NULL) < 0) {
+	if (pthread_create(&id2, NULL, Consumer, &n) < 0) {
     	printf("Thread not created\n");
   	}
  	if (pthread_join(id1, NULL) < 0) {
