@@ -16,9 +16,7 @@ sem_t *mutex;	//LOCK
 
 void* Producer(void* param ){
 
-	printf("Inside the producer\n");
 	int size = *(int*)param; 
-	printf("Size = %d\n", size);
 	buffer = (char*) malloc(size * sizeof(char));
  	sem_wait(mutex);
 	int i =0;
@@ -36,19 +34,17 @@ void* Producer(void* param ){
 
 void *Consumer(void *param ){
 	
-	printf("Inside the Consumer\n");
 	int size = *(int*)param;
  	sem_wait(mutex);
-	printf("sem_wait(mutex)\n");
 	int i =0;
 
-	for (i =0; i < size-1; i++){
+	printf("The reader read = ");
+	for (i =0; i < size; i++){
 		sem_wait(sem2);
-		printf("%s", buffer[i]);
+		printf("%c", buffer[i]);
         sem_post(sem1);
 	}
 	sem_post(mutex);
-	printf("The reader is exiting\n");
 	pthread_exit(0);
 
 }
@@ -137,6 +133,6 @@ int main(){
   	shmdt(sem_shm2);
   	shmctl(sem_shm2, IPC_RMID, 0);
 
-  	printf("Shared memory was destroyed\n");
+  	printf("\nShared memory was destroyed\n");
 
 }
