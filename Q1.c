@@ -15,23 +15,22 @@ sem_t *sem2;    //FULL
 sem_t *mutex;	//LOCK
 
 void* Producer(void* param ){
+
 	printf("Inside the producer\n");
 	int size = *(int*)param; 
 	printf("Size = %d\n", size);
 	buffer = (char*) malloc(size * sizeof(char));
+ 	sem_wait(mutex);
+	//do buffer stuff
+	int i =0;
+
+	for (i =0; i < size; i++){
+		sem_wait(sem1);
+		buffer[i] = 'a'+i;
+        sem_post(sem2);
+	}
+	sem_post(mutex);
 	printf("%s\n", buffer);
- //    sem_wait(mutex);
-	// // do buffer stuff
- //    printf("sem_wait(mutex) tak fine\n");
-	// int i =0;
-	// for (i =0; i < size; i++){
-	// 	sem_wait(sem1);
-	// 	printf("sem_wait(sem1) called\n");
-	// 	*buffer[i] = 'a'+i;
-	// 	printf("%s\n", *buffer[i]);
- //        sem_post(sem2);
-	// }
-	// sem_post(mutex);
 	pthread_exit(0);
 }
 
