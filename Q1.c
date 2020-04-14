@@ -52,6 +52,6 @@ int main(){
 
   	//shmdt(id_sem);
   	//shmctl(id_sem, IPC_RMID, 0);
-  	printf("Shared memory destroyed\n");
+  	printf("Shared memory was destroyed\n");
 
 }
