@@ -10,8 +10,13 @@ char* buffer;
 sem_t *sem1;
 sem_t *sem2;
 
-void *Producer(void *param ){
-	printf("Hello producer\n");
+void* Producer(void* param ){
+	printf("Inside producer\n");
+	int *n = (int*) param;
+	int nn = *n;
+	printf("N = \n", n);
+	pthread_exit(0);
+
 }
 
 void *Consumer(void *param ){
@@ -78,10 +83,10 @@ int main(){
 
 
 
-	if (pthread_create(&id1, NULL, & Producer, NULL) < 0) {
+	if (pthread_create(&id1, NULL, Producer, &n) < 0) {
     	printf("Thread not created\n");
   	}
-	if (pthread_create(&id2, NULL, & Consumer, NULL) < 0) {
+	if (pthread_create(&id2, NULL, Consumer, NULL) < 0) {
     	printf("Thread not created\n");
   	}
 
