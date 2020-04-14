@@ -15,7 +15,7 @@ sem_t *sem2;//f
 sem_t *mutex;
 
 void* Producer(void* param ){
-	printf("Inside producer\n");
+	printf("Inside the producer\n");
 	printf("N = %d\n", *(int*)param);
 
 
