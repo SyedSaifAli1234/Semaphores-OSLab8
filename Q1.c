@@ -9,11 +9,12 @@
 char* buffer;
 sem_t *sem1;
 sem_t *sem2;
+int n;
 
 void* Producer(void* param ){
 	printf("Inside producer\n");
-	int *n = (int*) param;
-	int nn = *n;
+	//int *n = (int*) param;
+	//int nn = *n;
 	printf("N = \n", n);
 	pthread_exit(0);
 
@@ -42,7 +43,7 @@ int main(){
 	printf("Shared memory created for buffer\n");
 
 
-	int n = 0;
+	// int n = 0;
 	printf("Input N : ");
 	scanf("%d", &n);
 	printf("%d\n", n);
@@ -83,9 +84,10 @@ int main(){
 
 
 
-	if (pthread_create(&id1, NULL, Producer, &n) < 0) {
+	if (pthread_create(&id1, NULL, Producer, NULL) < 0) {
     	printf("Thread not created\n");
   	}
+  	sleep(1);
 	if (pthread_create(&id2, NULL, Consumer, NULL) < 0) {
     	printf("Thread not created\n");
   	}
