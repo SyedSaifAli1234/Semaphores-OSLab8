@@ -132,6 +132,7 @@ int main(){
   	shmctl(sem_shm1, IPC_RMID, 0);
   	shmdt(sem_shm2);
   	shmctl(sem_shm2, IPC_RMID, 0);
+  	free(buffer);
 
   	printf("\nShared memory was destroyed\n");
 
